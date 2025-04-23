@@ -410,8 +410,8 @@ static cache_t cache;
 #define ERROR(M)    do { notify_assertion_violation(__FILE__, __LINE__, #M); exit(1); } while (0);
 #define APP(e)      reinterpret_cast<app*>(e)
 #define MASK(s)     ((2LU << ((s) - 1LU)) - 1LU)
-#define SIZE(e)     (mk_c(c)->m().get_sort(to_expr(e)))->get_parameter(0).get_int()
-#define IS_BOOL(e)  ((mk_c(c)->m().get_sort(to_expr(e)))->get_num_parameters() == 0)
+#define SIZE(e)     (to_expr(e)->get_sort()->get_parameter(0).get_int())
+#define IS_BOOL(e)  (to_expr(e)->get_sort()->get_num_parameters() == 0)
 #define ARGS(e)     (APP(of_expr(e))->get_args())
 #define OP(e)       (to_app(e)->get_decl()->get_info()->get_decl_kind())
 

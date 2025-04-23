@@ -575,8 +575,8 @@ static cache_t cache;
 
         // evaluate the query in the model
         Z3_ast  solution;
-        Z3_bool successfulEval =
-            Z3_model_eval(ctx, z3_m, query, Z3_TRUE, &solution);
+        bool successfulEval =
+            Z3_model_eval(ctx, z3_m, query, true, &solution);
         if (!successfulEval) {
             ERROR("Failed to evaluate model");
             return 0;
@@ -584,8 +584,8 @@ static cache_t cache;
 
         Z3_model_dec_ref(ctx, z3_m);
         if (Z3_get_ast_kind(ctx, solution) == Z3_NUMERAL_AST) {
-            Z3_bool successGet = Z3_get_numeral_uint64(ctx, solution, &res);
-            if (successGet != Z3_TRUE) {
+            bool successGet = Z3_get_numeral_uint64(ctx, solution, &res);
+            if (successGet != true) {
                 ERROR("z3fuzz_evaluate_expression_z3() failed to get constant");
                 return 0;
             }

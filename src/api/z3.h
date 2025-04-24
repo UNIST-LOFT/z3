@@ -21,6 +21,7 @@ Notes:
 #pragma once
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include "z3_macros.h"
 #include "z3_api.h"

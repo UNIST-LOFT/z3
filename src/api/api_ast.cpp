@@ -665,7 +665,7 @@ static cache_t cache;
             }
 
             if (f.m_num_args == 0) {
-                if (f.m_fid == 0x6) {
+                if (f.m_fid == mk_c(c)->get_bv_fid()) {
                     switch(f.m_decl_kind) {
                         case OP_BV_NUM: {
                             rational r = f.m_info->get_parameter(0).get_rational();
@@ -705,7 +705,7 @@ static cache_t cache;
                     }
                 }
             } else if (f.m_curr_arg == 1) {
-                if (f.m_fid == 0x6) {
+                if (f.m_fid == mk_c(c)->get_bv_fid()) {
                     switch(f.m_decl_kind) {
                         case OP_BNEG: {
                             res = -res;
@@ -730,7 +730,8 @@ static cache_t cache;
                             break;
                         }
                     }
-                } else { // f.m_fid == 0
+                } else {
+                    SASSERT_EQ(f.m_fid, mk_c(c)->get_basic_fid());
                     switch(f.m_decl_kind) {
                         case OP_NOT: {
                             res = !res;
@@ -767,7 +768,7 @@ static cache_t cache;
                     }
                 }
             } else if (f.m_curr_arg > 1) {
-                if (f.m_fid == 0x6) {
+                if (f.m_fid == mk_c(c)->get_bv_fid()) {
                     switch(f.m_decl_kind) {
                         case OP_BADD: {
                             // printf("BADD: %lx + %lx\n", f.m_res, res);
@@ -1054,7 +1055,7 @@ static cache_t cache;
 #define EVAL_ARG(args, i)   Z3_custom_eval_internal(c, of_ast(args[i]), data, symbols_sizes, data_size)
 
         register uint64_t arg2;
-        if (0x6 == fid) { // mk_c(c)->get_bv_fid()
+        if (fid == mk_c(c)->get_bv_fid()) {
             switch (_decl_kind) {
                 case OP_BV_NUM: {
                     rational r = _info->get_parameter(0).get_rational();
@@ -1635,7 +1636,7 @@ static cache_t cache;
                     ERROR("Unknown BV operator");
             }
 
-        } else if (0x0 == fid) { // mk_c(c)->get_basic_fid()
+        } else if (fid == mk_c(c)->get_basic_fid()) {
             switch(_decl_kind) {
                 case OP_TRUE: {
                     return 1;
@@ -1798,7 +1799,7 @@ static cache_t cache;
 
         family_id fid        = _info->get_family_id();
         decl_kind _decl_kind = _info->get_decl_kind();
-        if (0x0 != fid || _decl_kind != OP_AND)
+        if (fid != mk_c(c)->get_basic_fid() || _decl_kind != OP_AND)
             return Z3_custom_eval(c, _expr, data, symbols_sizes, data_size);
 
         expr * const * args = APP(_expr)->get_args();
